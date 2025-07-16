@@ -1,0 +1,291 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #ffd6e8, #ff9bd2);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Dancing Script', cursive;
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Tela inicial com botão */
+.tela-inicial {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 40px 30px;
+  border-radius: 25px;
+  box-shadow: 0 0 30px #ff7bbe88;
+  max-width: 350px;
+}
+
+.btn-comecar {
+  background: #ff69b4cc;
+  border: none;
+  padding: 20px 40px;
+  font-size: 1.5rem;
+  border-radius: 50px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0 25px #ff69b4aa;
+  transition: background 0.3s ease;
+  font-weight: bold;
+  text-shadow: 0 0 8px #fff;
+}
+
+.btn-comecar:hover {
+  background: #ff3c8d;
+  box-shadow: 0 0 40px #ff3c8dcc;
+}
+
+/* Conteúdo principal */
+.conteudo {
+  text-align: center;
+  max-width: 800px; /* aumentei pra dar espaço pro karaokê do lado no desktop */
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 0 30px #ff7bbe88;
+  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Container para imagem */
+.imagem-container {
+  flex: 1 1 350px;
+  max-width: 350px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imagem-container img {
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 0 15px #ff7bbeaa;
+  transition: opacity 0.7s ease;
+}
+
+/* Container do texto (frase) - pode ficar oculto, mas mantive */
+.texto-container {
+  flex-basis: 100%;
+}
+
+/* Frase antiga (frase por frase) */
+.frase {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  color: #fff;
+  min-height: 3.5em;
+  max-width: 90%;
+  margin: 10px auto 0 auto;
+  line-height: 1.4;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-shadow:
+    0 0 10px #ff9bd2,
+    0 0 20px #ff6abf;
+  letter-spacing: 1.1px;
+  word-wrap: break-word;
+  word-break: break-word;
+  text-align: center;
+}
+
+.frase.mostrar {
+  opacity: 1;
+}
+
+/* Bloco de karaokê - no desktop ao lado da imagem, no mobile embaixo */
+.karaoke-container {
+  flex: 1 1 350px;
+  max-width: 350px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 0 30px #ff69b4aa;
+  backdrop-filter: blur(10px);
+  color: #a000a0;
+  font-weight: bold;
+  font-family: 'Great Vibes', cursive;
+  overflow-y: auto;
+  max-height: 400px;
+  line-height: 1.5;
+  font-size: 1.8rem;
+  text-shadow: 0 0 10px #fff, 0 0 20px #a000a0aa;
+  user-select: none;
+}
+
+/* Brilhinhos */
+#brilhinhos {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.brilhinho {
+  position: absolute;
+  background: radial-gradient(circle, #fff, #ff69b4cc, transparent);
+  border-radius: 50%;
+  opacity: 0.8;
+  animation-name: caer;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes caer {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+/* Cartinha fixa no canto superior direito */
+#cartinha {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 80px;
+  height: auto;
+  cursor: pointer;
+  z-index: 20;
+  border-radius: 15px;
+  box-shadow: 0 0 15px #ff69b4cc;
+  transition: transform 0.3s ease;
+}
+
+/* Animação pulse para cartinha */
+#cartinha.pulse {
+  animation: pulseCartinha 0.5s ease forwards;
+}
+
+@keyframes pulseCartinha {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Modal da carta */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  padding: 20px;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-conteudo {
+  background: linear-gradient(135deg, #ff9bd2, #ffd6e8);
+  border-radius: 20px;
+  padding: 30px 40px;
+  max-width: 350px;
+  text-align: center;
+  box-shadow: 0 0 30px #ff69b4cc;
+  position: relative;
+  font-family: 'Dancing Script', cursive;
+  color: #fff;
+}
+
+.modal-conteudo .fechar {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+}
+
+.modal-conteudo .patolina-img {
+  width: 120px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 25px #ff69b4cc;
+}
+
+.mensagem-carta {
+  font-size: 1.3rem;
+  line-height: 1.5;
+  letter-spacing: 1px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .conteudo {
+    max-width: 95vw;
+    flex-direction: column;
+    align-items: center;
+  }
+  .imagem-container, .karaoke-container {
+    max-width: 90vw;
+    flex: none;
+    margin-bottom: 20px;
+  }
+  .karaoke-container {
+    max-height: 200px;
+    font-size: 1.3rem;
+  }
+  .frase {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-comecar {
+    padding: 15px 30px;
+    font-size: 1.3rem;
+  }
+  #cartinha {
+    width: 60px;
+  }
+  .modal-conteudo {
+    max-width: 90vw;
+    padding: 20px 25px;
+  }
+  .modal-conteudo .patolina-img {
+    width: 90px;
+  }
+  .mensagem-carta {
+    font-size: 1rem;
+  }
+}
