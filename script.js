@@ -14,7 +14,7 @@ const btnFecharModal = modalCarta.querySelector('.fechar');
 let cenaAtual = 0;
 let timeoutId = null;
 
-// Cenas com imagem e tempo
+// Agora temos 8 imagens, com tempos iniciais
 const cenas = [
   { imagem: "assets/img1.png", tempo: 2 },
   { imagem: "assets/img2.png", tempo: 8 },
@@ -26,7 +26,7 @@ const cenas = [
   { imagem: "assets/img8.png", tempo: 45 }
 ];
 
-// Estrofes sincronizadas com tempo
+// Letras sincronizadas por estrofe com intervalo de segundos
 const letras = [
   {
     inicio: 18,
@@ -61,7 +61,7 @@ De ser criança`
   }
 ];
 
-// Brilhinhos no fundo
+// Criar brilhinhos
 function criarBrilhinhos() {
   const num = 30;
   for (let i = 0; i < num; i++) {
@@ -86,12 +86,11 @@ function resetBrilhinho(brilho) {
 
 criarBrilhinhos();
 
-// Troca de imagem com loop
+// Mostrar imagem com fade
 function mostrarCena(index) {
-  const cena = cenas[index % cenas.length];
   imagemEl.style.opacity = 0;
   setTimeout(() => {
-    imagemEl.src = cena.imagem;
+    imagemEl.src = cenas[index].imagem;
     imagemEl.style.opacity = 1;
   }, 300);
 }
@@ -99,22 +98,25 @@ function mostrarCena(index) {
 // Mostra a estrofe formatada
 function mostrarLetra(texto) {
   const linhas = texto.split('\n');
-  letraEl.innerHTML = linhas.map(l => `<p>${l}</p>`).join('');
+  letraEl.innerHTML = linhas.map(linha => `<p>${linha}</p>`).join('');
 }
 
-// Sincroniza imagens e letra com a música
 function iniciarSincronizacao() {
   const agora = musica.currentTime;
 
-  // Troca imagem (loop infinito)
-  if (agora >= cenas[cenaAtual % cenas.length].tempo) {
+  // Alterna imagem em loop com base no tempo (repetição)
+  const cenaIndex = cenas.findIndex((c, i) => {
+    const proximaCena = cenas[i + 1];
+    return agora >= c.tempo && (!proximaCena || agora < proximaCena.tempo);
+  });
+
+  if (cenaIndex !== -1 && cenaIndex !== cenaAtual) {
+    cenaAtual = cenaIndex;
     mostrarCena(cenaAtual);
-    cenaAtual++;
   }
 
-  // Mostra a estrofe correspondente
+  // Encontra estrofe atual
   const estrofeAtual = letras.find(l => agora >= l.inicio && agora < l.fim);
-
   if (estrofeAtual) {
     mostrarLetra(estrofeAtual.texto);
   } else {
@@ -124,21 +126,19 @@ function iniciarSincronizacao() {
   timeoutId = setTimeout(iniciarSincronizacao, 200);
 }
 
-// Botão "Clique aqui"
+// Começar
 btnComecar.addEventListener('click', () => {
   telaInicial.style.display = 'none';
-  conteudo.style.display = 'block';
+  conteudo.style.display = 'flex';
   musica.play();
 });
 
-// Eventos da música
+// Música
 musica.addEventListener('play', () => {
   cenaAtual = 0;
   iniciarSincronizacao();
 });
-
 musica.addEventListener('pause', () => clearTimeout(timeoutId));
-
 musica.addEventListener('ended', () => {
   clearTimeout(timeoutId);
   imagemEl.style.opacity = 0;
@@ -146,13 +146,12 @@ musica.addEventListener('ended', () => {
   cenaAtual = 0;
 });
 
-// Cartinha animada
+// Cartinha
 cartinha.addEventListener('click', () => {
   cartinha.classList.add('pulse');
   setTimeout(() => cartinha.classList.remove('pulse'), 500);
   setTimeout(() => modalCarta.classList.add('show'), 500);
 });
-
 btnFecharModal.addEventListener('click', () => modalCarta.classList.remove('show'));
 modalCarta.addEventListener('click', (e) => {
   if (e.target === modalCarta) modalCarta.classList.remove('show');
